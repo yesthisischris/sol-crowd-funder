@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Launch init_campaign.py",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/client_py/init_campaign.py",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}
