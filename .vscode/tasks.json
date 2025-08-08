@@ -1,0 +1,49 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Anchor: Build",
+      "type": "shell",
+      "command": "anchor build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Anchor: Deploy (devnet)",
+      "type": "shell",
+      "command": "anchor deploy",
+      "problemMatcher": []
+    },
+    {
+      "label": "Solana: Local validator",
+      "type": "shell",
+      "command": "solana-test-validator",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Python: Init campaign",
+      "type": "shell",
+      "command": "source .venv/bin/activate && python client_py/init_campaign.py"
+    },
+    {
+      "label": "Python: Contribute 0.1",
+      "type": "shell",
+      "command": "source .venv/bin/activate && python client_py/contribute.py"
+    },
+    {
+      "label": "Python: Withdraw",
+      "type": "shell",
+      "command": "source .venv/bin/activate && python client_py/withdraw.py"
+    },
+    {
+      "label": "Python: Refund",
+      "type": "shell",
+      "command": "source .venv/bin/activate && python client_py/refund.py"
+    },
+    {
+      "label": "Python: Tests",
+      "type": "shell",
+      "command": "source .venv/bin/activate && pytest -q"
+    }
+  ]
+}

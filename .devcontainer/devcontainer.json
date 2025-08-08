@@ -1,0 +1,50 @@
+{
+  "name": "Solana Crowdfund (Anchor + Python)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/node:1": { "version": "lts" },
+    "ghcr.io/devcontainers/features/rust:1": { "profile": "minimal" },
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
+  },
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "containerEnv": {
+    "ANCHOR_PROVIDER_URL": "https://api.devnet.solana.com",
+    "ANCHOR_WALLET": "/workspaces/${localWorkspaceFolderBasename}/.devcontainer/keys/id.json"
+  },
+  "postCreateCommand": "bash scripts/devcontainer-setup.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "vadimcn.vscode-lldb",
+        "serayuzgur.crates",
+        "tamasfe.even-better-toml",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "esbenp.prettier-vscode",
+        "oderwat.indent-rainbow"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "rust-analyzer.check.command": "clippy",
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["-q"],
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "remoteUser": "vscode",
+  "updateContentCommand": "",
+  "onCreateCommand": "",
+  "runArgs": [
+    "--env=SOLANA_INSTALL_UPDATE_SKIP_PROMPT=1"
+  ],
+  "mounts": [
+    "source=${localEnv:HOME}/.cargo,target=/home/vscode/.cargo,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.rustup,target=/home/vscode/.rustup,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.npm,target=/home/vscode/.npm,type=bind,consistency=cached"
+  ]
+}

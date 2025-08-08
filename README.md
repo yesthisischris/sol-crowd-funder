@@ -43,6 +43,14 @@ python client_py/withdraw.py
 python client_py/refund.py
 ```
 
+## Codespaces
+- Click **Code → Create codespace on main**.
+- First boot runs `.devcontainer/scripts/devcontainer-setup.sh`:
+  - Installs Solana CLI, Anchor CLI, Rust, Node, Python deps
+  - Generates a devnet keypair at `.devcontainer/keys/id.json`
+  - Funds it with a small devnet airdrop
+- Use **Tasks**: `Terminal → Run Task…` → e.g. *Anchor: Build*, *Python: Init campaign*.
+
 ## Local Testing
 ```bash
 solana-test-validator   # run in a separate terminal (optional)
