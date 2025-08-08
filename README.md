@@ -1,18 +1,20 @@
 # Solana Crowdfund (Anchor + Python)
 
-A tiny, educational crowdfunding program on Solana. You’ll learn:
-- How to derive PDAs (Program Derived Addresses) for state + vaults
-- How to write instruction handlers in Anchor
-- How to call them from **Python** (no TypeScript required)
+A basic crowdfunding program on Solana.
 
-## Prereqs (one-time)
+Features:
+- Derives PDAs (Program Derived Addresses) for state and vaults
+- Instruction handlers written with Anchor
+- Interact from **Python** (no TypeScript needed)
+
+## Requirements
 - Solana CLI
 - Rust + cargo
 - Anchor CLI (`npm i -g @coral-xyz/anchor-cli`)
 - Python 3.11+ (venv recommended)
-- Phantom wallet (switch to **Devnet** in Phantom settings)
+- Phantom wallet (set to **Devnet**)
 
-## Configure devnet + airdrop (CLI)
+## Devnet Setup & Airdrop
 ```bash
 solana config set --url https://api.devnet.solana.com
 solana-keygen new -o ~/.config/solana/id.json --no-bip39-passphrase --force
@@ -20,16 +22,16 @@ solana airdrop 2
 solana balance
 ```
 
-Build & deploy (Anchor)
+## Build & Deploy (Anchor)
 ```bash
-anchor keys list                                  # copy the Program ID
-# 1) Put Program ID in programs/<name>/src/lib.rs (declare_id!)
-# 2) Also put it in Anchor.toml under [programs.devnet]
+anchor keys list                                  # copy your Program ID
+# 1) Add Program ID to programs/<name>/src/lib.rs (declare_id!)
+# 2) Also add it in Anchor.toml under [programs.devnet]
 anchor build
 anchor deploy
 ```
 
-Python client
+## Python Client
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r client_py/requirements.txt
@@ -41,17 +43,15 @@ python client_py/withdraw.py
 python client_py/refund.py
 ```
 
-Local testing
+## Local Testing
 ```bash
-solana-test-validator   # in a separate terminal (optional)
+solana-test-validator   # run in a separate terminal (optional)
 pytest -q
 ```
 
-Notes
-All lamports live in a vault PDA owned by the program.
-
-Refunds only possible if deadline passed and goal not met.
-
-Cluster time comes from Clock::get()?.unix_timestamp.
+## Notes
+- All lamports are stored in a vault PDA owned by the program.
+- Refunds are available if the deadline passes and the goal isn’t met.
+- Cluster time is based on `Clock::get()?.unix_timestamp`.
 
 License: MIT
