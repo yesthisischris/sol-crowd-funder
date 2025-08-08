@@ -1,0 +1,6 @@
+[programs.devnet]
+solana_crowdfund = "REPLACE_WITH_YOUR_PROGRAM_ID"
+
+[provider]
+cluster = "Devnet"
+wallet = "~/.config/solana/id.json"

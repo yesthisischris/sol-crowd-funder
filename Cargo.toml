@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "programs/solana_crowdfund"
+]
+
+[profile.release]
+overflow-checks = true

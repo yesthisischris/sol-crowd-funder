@@ -1,0 +1,16 @@
+[package]
+name = "solana-crowdfund"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "solana_crowdfund"
+
+[features]
+default = []
+no-entrypoint = []
+
+[dependencies]
+anchor-lang = { version = "0.31.1", features = ["init-if-needed"] }
