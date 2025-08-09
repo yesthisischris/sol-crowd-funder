@@ -4,7 +4,7 @@ use anchor_lang::prelude::*;
 // This is the unique identifier for the smart contract (program) on Solana.
 // In development it’s a placeholder; after `anchor deploy` you’ll replace it
 // with your real, generated Program ID (from `anchor keys list`).
-declare_id!("11111111111111111111111111111111");
+declare_id!("EMyua7eaaU4Tum3pV9zXauCGCiQPm4BCdEKBWREqLEPb");
 
 /// The #[program] module tells Anchor: “these are the instruction handlers”.
 /// Think of each function inside as a transaction users can send.
@@ -34,10 +34,10 @@ pub mod solana_crowdfund {
         let c = &mut ctx.accounts.campaign;
 
         // Initialize the campaign fields. These persist on chain.
-        c.creator = ctx.accounts.creator.key();  // who owns/created this campaign
-        c.goal_lamports = goal_lamports;         // how much we aim to raise
-        c.deadline_unix = deadline_unix;         // when the campaign ends
-        c.total_raised = 0;                      // start at zero raised
+        c.creator = ctx.accounts.creator.key(); // who owns/created this campaign
+        c.goal_lamports = goal_lamports; // how much we aim to raise
+        c.deadline_unix = deadline_unix; // when the campaign ends
+        c.total_raised = 0; // start at zero raised
 
         // Indicate success (no return value beyond Ok(())).
         Ok(())
@@ -80,7 +80,9 @@ pub mod solana_crowdfund {
         b.amount = b.amount.checked_add(amount).unwrap(); // checked math to avoid overflow
 
         // Update aggregate raised amount on the campaign.
-        ctx.accounts.campaign.total_raised = ctx.accounts.campaign
+        ctx.accounts.campaign.total_raised = ctx
+            .accounts
+            .campaign
             .total_raised
             .checked_add(amount)
             .unwrap();
@@ -94,10 +96,17 @@ pub mod solana_crowdfund {
         let c = &ctx.accounts.campaign;
 
         // Enforce success criteria: raised >= goal.
-        require!(c.total_raised >= c.goal_lamports, CrowdfundError::GoalNotMet);
+        require!(
+            c.total_raised >= c.goal_lamports,
+            CrowdfundError::GoalNotMet
+        );
 
         // Ensure the signer is the original creator (authorization).
-        require_keys_eq!(c.creator, ctx.accounts.creator.key(), CrowdfundError::NotCreator);
+        require_keys_eq!(
+            c.creator,
+            ctx.accounts.creator.key(),
+            CrowdfundError::NotCreator
+        );
 
         // Move all lamports from the vault PDA to the creator.
         // Here we adjust lamport balances directly — a common low-level pattern.
@@ -136,12 +145,8 @@ pub mod solana_crowdfund {
             .checked_sub(amt)
             .unwrap();
 
-        **ctx.accounts.backer.lamports.borrow_mut() = ctx
-            .accounts
-            .backer
-            .lamports()
-            .checked_add(amt)
-            .unwrap();
+        **ctx.accounts.backer.lamports.borrow_mut() =
+            ctx.accounts.backer.lamports().checked_add(amt).unwrap();
 
         // Prevent double refunds by zeroing out their recorded amount.
         ctx.accounts.backer_state.amount = 0;
@@ -173,7 +178,9 @@ pub struct InitializeCampaign<'info> {
 
     /// The “vault” PDA (a system account owned by this program) that holds SOL.
     #[account(
-        mut,                                                     // will receive SOL
+        init,                                                    // create the vault PDA
+        payer = creator,                                         // creator pays rent
+        space = 0,                                               // no data, just lamports
         seeds = [b"vault", campaign.key().as_ref()],
         bump
     )]
@@ -283,18 +290,18 @@ pub struct Refund<'info> {
 /// On-chain data representing a campaign.
 #[account] // Anchor adds an 8-byte discriminator and handles (de)serialization.
 pub struct Campaign {
-    pub creator: Pubkey,        // who created the campaign (32 bytes)
-    pub goal_lamports: u64,     // target amount in lamports (8 bytes)
-    pub deadline_unix: i64,     // end timestamp (8 bytes, signed i64)
-    pub total_raised: u64,      // how many lamports raised so far (8 bytes)
+    pub creator: Pubkey,    // who created the campaign (32 bytes)
+    pub goal_lamports: u64, // target amount in lamports (8 bytes)
+    pub deadline_unix: i64, // end timestamp (8 bytes, signed i64)
+    pub total_raised: u64,  // how many lamports raised so far (8 bytes)
 }
 
 /// Tracks how much a particular backer gave to a particular campaign.
 #[account]
 pub struct BackerState {
-    pub backer: Pubkey,         // backer’s public key (32 bytes)
-    pub campaign: Pubkey,       // campaign public key (32 bytes)
-    pub amount: u64,            // total contributed in lamports (8 bytes)
+    pub backer: Pubkey,   // backer’s public key (32 bytes)
+    pub campaign: Pubkey, // campaign public key (32 bytes)
+    pub amount: u64,      // total contributed in lamports (8 bytes)
 }
 
 /// Custom errors returned by our program. Anchor maps these to readable messages.
