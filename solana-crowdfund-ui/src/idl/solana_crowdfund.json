@@ -1,5 +1,88 @@
 {
-  "version": "0.0.0",
+  "version": "0.1.0",
   "name": "solana_crowdfund",
-  "instructions": []
+  "instructions": [
+    {
+      "name": "initializeCampaign",
+      "accounts": [
+        {"name": "creator", "isMut": true, "isSigner": true},
+        {"name": "campaign", "isMut": true, "isSigner": false},
+        {"name": "campaignVault", "isMut": true, "isSigner": false},
+        {"name": "systemProgram", "isMut": false, "isSigner": false}
+      ],
+      "args": [
+        {"name": "goalLamports", "type": "u64"},
+        {"name": "deadlineUnix", "type": "i64"}
+      ]
+    },
+    {
+      "name": "contribute",
+      "accounts": [
+        {"name": "backer", "isMut": true, "isSigner": true},
+        {"name": "campaign", "isMut": true, "isSigner": false},
+        {"name": "backerState", "isMut": true, "isSigner": false},
+        {"name": "campaignVault", "isMut": true, "isSigner": false},
+        {"name": "systemProgram", "isMut": false, "isSigner": false}
+      ],
+      "args": [
+        {"name": "amount", "type": "u64"}
+      ]
+    },
+    {
+      "name": "withdraw",
+      "accounts": [
+        {"name": "creator", "isMut": true, "isSigner": true},
+        {"name": "campaign", "isMut": true, "isSigner": false},
+        {"name": "campaignVault", "isMut": true, "isSigner": false}
+      ],
+      "args": []
+    },
+    {
+      "name": "refund",
+      "accounts": [
+        {"name": "backer", "isMut": true, "isSigner": true},
+        {"name": "campaign", "isMut": true, "isSigner": false},
+        {"name": "backerState", "isMut": true, "isSigner": false},
+        {"name": "campaignVault", "isMut": true, "isSigner": false}
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "campaign",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {"name": "creator", "type": "publicKey"},
+          {"name": "goalLamports", "type": "u64"},
+          {"name": "deadlineUnix", "type": "i64"},
+          {"name": "totalRaised", "type": "u64"}
+        ]
+      }
+    },
+    {
+      "name": "backerState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {"name": "backer", "type": "publicKey"},
+          {"name": "campaign", "type": "publicKey"},
+          {"name": "amount", "type": "u64"}
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {"code": 6000, "name": "InvalidDeadline", "msg": "Deadline must be in the future"},
+    {"code": 6001, "name": "CampaignEnded", "msg": "Campaign has ended"},
+    {"code": 6002, "name": "NotCreator", "msg": "Only the creator can withdraw"},
+    {"code": 6003, "name": "GoalNotMet", "msg": "Goal not met"},
+    {"code": 6004, "name": "NotExpired", "msg": "Campaign not expired"},
+    {"code": 6005, "name": "GoalMet", "msg": "Goal met; refunds disabled"},
+    {"code": 6006, "name": "NothingToRefund", "msg": "Nothing to refund"}
+  ],
+  "metadata": {
+    "address": "11111111111111111111111111111111"
+  }
 }
