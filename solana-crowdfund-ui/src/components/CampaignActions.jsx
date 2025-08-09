@@ -17,7 +17,7 @@ export default function CampaignActions() {
     const goalLamports = new BN(parseFloat(goal) * web3.LAMPORTS_PER_SOL);
     const deadlineTs = new BN(Math.floor(Date.now() / 1000 + parseInt(deadline) * 60));
     await program.methods
-      .initialize(goalLamports, deadlineTs)
+      .initialize_campaign(goalLamports, deadlineTs)
       .accounts({ creator: wallet.publicKey })
       .rpc();
   };
@@ -29,7 +29,7 @@ export default function CampaignActions() {
     const amountLamports = new BN(parseFloat(amount) * web3.LAMPORTS_PER_SOL);
     await program.methods
       .contribute(amountLamports)
-      .accounts({ contributor: wallet.publicKey })
+      .accounts({ backer: wallet.publicKey })
       .rpc();
   };
 
@@ -49,7 +49,7 @@ export default function CampaignActions() {
     const program = getProgram(provider);
     await program.methods
       .refund()
-      .accounts({ contributor: wallet.publicKey })
+      .accounts({ backer: wallet.publicKey })
       .rpc();
   };
 
