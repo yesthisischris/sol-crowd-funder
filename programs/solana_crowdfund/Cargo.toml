@@ -13,4 +13,4 @@ default = []
 no-entrypoint = []
 
 [dependencies]
-anchor-lang = { version = "0.31.1", features = ["init-if-needed"] }
+anchor-lang = { version = "1.0.0", features = ["init-if-needed"] }
